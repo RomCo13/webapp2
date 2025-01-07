@@ -1,0 +1,174 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const router = express_1.default.Router();
+const student_controller_1 = __importDefault(require("../controllers/student_controller"));
+const auth_middleware_1 = __importDefault(require("../common/auth_middleware"));
+/**
+ * @swagger
+ * tags:
+ *   name: Students
+ *   description: API for managing students
+ */
+/**
+ * @swagger
+ * /students:
+ *   get:
+ *     summary: Get all students
+ *     tags: [Students]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: List of students retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: string
+ *                   name:
+ *                     type: string
+ *                   age:
+ *                     type: number
+ *                   email:
+ *                     type: string
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Server error
+ */
+router.get("/", auth_middleware_1.default, student_controller_1.default.get.bind(student_controller_1.default));
+/**
+ * @swagger
+ * /students/{id}:
+ *   get:
+ *     summary: Get a student by ID
+ *     tags: [Students]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the student
+ *     responses:
+ *       200:
+ *         description: Student retrieved successfully
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Student not found
+ *       500:
+ *         description: Server error
+ */
+router.get("/:id", auth_middleware_1.default, student_controller_1.default.getById.bind(student_controller_1.default));
+/**
+ * @swagger
+ * /students:
+ *   post:
+ *     summary: Create a new student
+ *     tags: [Students]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               age:
+ *                 type: number
+ *               email:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Student created successfully
+ *       400:
+ *         description: Bad request
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Server error
+ */
+router.post("/", auth_middleware_1.default, student_controller_1.default.post.bind(student_controller_1.default));
+/**
+ * @swagger
+ * /students/{id}:
+ *   put:
+ *     summary: Update a student by ID
+ *     tags: [Students]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the student
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               age:
+ *                 type: number
+ *               email:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Student updated successfully
+ *       400:
+ *         description: Bad request
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Student not found
+ *       500:
+ *         description: Server error
+ */
+router.put("/:id", auth_middleware_1.default, student_controller_1.default.putById.bind(student_controller_1.default));
+/**
+ * @swagger
+ * /students/{id}:
+ *   delete:
+ *     summary: Delete a student by ID
+ *     tags: [Students]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the student
+ *     responses:
+ *       200:
+ *         description: Student deleted successfully
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Student not found
+ *       500:
+ *         description: Server error
+ */
+router.delete("/:id", auth_middleware_1.default, student_controller_1.default.deleteById.bind(student_controller_1.default));
+exports.default = router;
+//# sourceMappingURL=student_route.js.map
