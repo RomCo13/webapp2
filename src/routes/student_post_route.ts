@@ -12,7 +12,7 @@ import authMiddleware from "../common/auth_middleware";
 
 /**
  * @swagger
- * /student-posts:
+ * /studentposts:
  *   get:
  *     summary: Get all student posts
  *     tags: [StudentPosts]
@@ -39,7 +39,7 @@ router.get("/", StudentPostController.getPosts);
 
 /**
  * @swagger
- * /student-posts/{id}:
+ * /studentposts/{id}:
  *   get:
  *     summary: Get a student post by ID
  *     tags: [StudentPosts]
@@ -62,7 +62,7 @@ router.get("/:id", StudentPostController.getPostById);
 
 /**
  * @swagger
- * /student-posts:
+ * /studentposts:
  *   post:
  *     summary: Create a new student post
  *     tags: [StudentPosts]
@@ -96,7 +96,7 @@ router.post("/", authMiddleware, StudentPostController.createPost);
 
 /**
  * @swagger
- * /student-posts/{id}:
+ * /studentposts/{id}:
  *   put:
  *     summary: Update a student post by ID
  *     tags: [StudentPosts]
@@ -132,7 +132,7 @@ router.put("/:id", authMiddleware, StudentPostController.putById);
 
 /**
  * @swagger
- * /student-posts/{id}:
+ * /studentposts/{id}:
  *   delete:
  *     summary: Delete a student post by ID
  *     tags: [StudentPosts]

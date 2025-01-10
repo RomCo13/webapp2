@@ -30,7 +30,7 @@ const initApp = () => {
                 next();
             });
             app.use("/students", student_route_1.default);
-            app.use("/student-posts", student_post_route_1.default);
+            app.use("/studentposts", student_post_route_1.default);
             app.use("/auth", auth_route_1.default);
             app.use("/file", file_route_1.default);
             app.use("/public", express_1.default.static("public"));
