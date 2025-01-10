@@ -26,7 +26,7 @@ const initApp = (): Promise<Express> => {
         next();
       })
       app.use("/students", studentRoute);
-      app.use("/studentpost", studentPostRoute);
+      app.use("/student-posts", studentPostRoute);
       app.use("/auth", authRoute);
       app.use("/file", fileRoute);
       app.use("/public", express.static("public"));
