@@ -10,6 +10,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const student_route_1 = __importDefault(require("./routes/student_route"));
 const student_post_route_1 = __importDefault(require("./routes/student_post_route"));
+const comments_route_1 = __importDefault(require("./routes/comments_route"));
 const auth_route_1 = __importDefault(require("./routes/auth_route"));
 const file_route_1 = __importDefault(require("./routes/file_route"));
 const initApp = () => {
@@ -32,7 +33,7 @@ const initApp = () => {
             app.use("/students", student_route_1.default);
             app.use("/studentpost", student_post_route_1.default);
             app.use("/auth", auth_route_1.default);
-            app.use("/comments", student_post_route_1.default);
+            app.use("/comments", comments_route_1.default);
             app.use("/file", file_route_1.default);
             app.use("/public", express_1.default.static("public"));
             resolve(app);
