@@ -8,18 +8,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.StudentController = void 0;
 // Import necessary modules and dependencies
-const student_model_1 = __importDefault(require("../models/student_model")); // Hypothetical model
+const student_model_1 = require("../models/student.model");
 const express_validator_1 = require("express-validator");
 class StudentController {
-    get(req, res) {
+    static get(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const students = yield student_model_1.default.find(); // Fetch all students
+                const students = yield student_model_1.Student.find(); // Fetch all students
                 res.status(200).json(students);
             }
             catch (error) {
@@ -28,11 +26,11 @@ class StudentController {
             }
         });
     }
-    getById(req, res) {
+    static getById(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { id } = req.params;
-                const student = yield student_model_1.default.findById(id); // Fetch student by ID
+                const student = yield student_model_1.Student.findById(id); // Fetch student by ID
                 if (!student) {
                     return res.status(404).json({ message: "Student not found" });
                 }
@@ -44,26 +42,30 @@ class StudentController {
             }
         });
     }
-    post(req, res) {
+    static createStudent(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log('here');
-            const errors = (0, express_validator_1.validationResult)(req);
-            if (!errors.isEmpty()) {
-                return res.status(400).json({ errors: errors.array() });
-            }
             try {
-                const { name, age, email } = req.body;
-                const newStudent = new student_model_1.default({ name, age, email }); // Create new student
-                yield newStudent.save(); // Save to database
-                res.status(201).json(newStudent);
+                const studentData = req.body;
+                // Create a new Student instance using the mongoose model
+                const student = new student_model_1.Student(Object.assign({}, studentData));
+                // Save the student to the database
+                const savedStudent = yield student.save();
+                res.status(201).json({
+                    status: 'success',
+                    data: savedStudent
+                });
             }
             catch (error) {
-                console.error("Error creating student:", error);
-                res.status(500).json({ message: "Server error" });
+                console.error('Error creating student:', error);
+                res.status(500).json({
+                    status: 'error',
+                    message: 'Failed to create student',
+                    error: error.message
+                });
             }
         });
     }
-    putById(req, res) {
+    static putById(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const errors = (0, express_validator_1.validationResult)(req);
             if (!errors.isEmpty()) {
@@ -72,7 +74,7 @@ class StudentController {
             try {
                 const { id } = req.params;
                 const { name, age, email } = req.body;
-                const student = yield student_model_1.default.findById(id);
+                const student = yield student_model_1.Student.findById(id);
                 if (!student) {
                     return res.status(404).json({ message: "Student not found" });
                 }
@@ -86,11 +88,11 @@ class StudentController {
             }
         });
     }
-    deleteById(req, res) {
+    static deleteById(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { id } = req.params;
-                const student = yield student_model_1.default.findByIdAndDelete(id); // Delete by ID
+                const student = yield student_model_1.Student.findByIdAndDelete(id); // Delete by ID
                 if (!student) {
                     return res.status(404).json({ message: "Student not found" });
                 }
@@ -103,5 +105,5 @@ class StudentController {
         });
     }
 }
-exports.default = new StudentController();
+exports.StudentController = StudentController;
 //# sourceMappingURL=student_controller.js.map

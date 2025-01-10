@@ -1,6 +1,6 @@
 import express from "express";
 const router = express.Router();
-import studentController from "../controllers/student_controller";
+import { StudentController } from '../controllers/student_controller';
 import authMiddleware from "../common/auth_middleware";
 
 /**
@@ -41,7 +41,8 @@ import authMiddleware from "../common/auth_middleware";
  *       500:
  *         description: Server error
  */
-router.get("/", authMiddleware, studentController.get.bind(studentController));
+
+router.get("/", authMiddleware, StudentController.get);
 
 /**
  * @swagger
@@ -68,7 +69,7 @@ router.get("/", authMiddleware, studentController.get.bind(studentController));
  *       500:
  *         description: Server error
  */
-router.get("/:id", authMiddleware, studentController.getById.bind(studentController));
+router.get("/:id", authMiddleware, StudentController.getById);
 
 /**
  * @swagger
@@ -101,11 +102,11 @@ router.get("/:id", authMiddleware, studentController.getById.bind(studentControl
  *       500:
  *         description: Server error
  */
-router.post("/", authMiddleware, studentController.post.bind(studentController));
+router.post("/", authMiddleware, StudentController.createStudent);
 
 /**
  * @swagger
- * /students/{id}:
+ * /students:
  *   put:
  *     summary: Update a student by ID
  *     tags: [Students]
@@ -143,7 +144,7 @@ router.post("/", authMiddleware, studentController.post.bind(studentController))
  *       500:
  *         description: Server error
  */
-router.put("/:id", authMiddleware, studentController.putById.bind(studentController));
+router.put("/:id", authMiddleware, StudentController.putById);
 
 /**
  * @swagger
@@ -170,6 +171,6 @@ router.put("/:id", authMiddleware, studentController.putById.bind(studentControl
  *       500:
  *         description: Server error
  */
-router.delete("/:id", authMiddleware, studentController.deleteById.bind(studentController));
+router.delete("/:id", authMiddleware, StudentController.deleteById);
 
 export default router;

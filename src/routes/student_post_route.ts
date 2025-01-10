@@ -1,6 +1,6 @@
 import express from "express";
 const router = express.Router();
-import studentPostController from "../controllers/student_post_controller";
+import { StudentPostController } from "../controllers/student_post_controller";
 import authMiddleware from "../common/auth_middleware";
 
 /**
@@ -12,7 +12,7 @@ import authMiddleware from "../common/auth_middleware";
 
 /**
  * @swagger
- * /:
+ * /studentpost:
  *   get:
  *     summary: Get all student posts
  *     tags: [StudentPosts]
@@ -35,11 +35,11 @@ import authMiddleware from "../common/auth_middleware";
  *       500:
  *         description: Server error
  */
-router.get("/", studentPostController.get.bind(studentPostController));
+router.get("/", StudentPostController.getPosts);
 
 /**
  * @swagger
- * /{id}:
+ * /studentpost/{id}:
  *   get:
  *     summary: Get a student post by ID
  *     tags: [StudentPosts]
@@ -58,11 +58,11 @@ router.get("/", studentPostController.get.bind(studentPostController));
  *       500:
  *         description: Server error
  */
-router.get("/:id", studentPostController.getById.bind(studentPostController));
+router.get("/:id", StudentPostController.getPostById);
 
 /**
  * @swagger
- * /:
+ * /studentpost:
  *   post:
  *     summary: Create a new student post
  *     tags: [StudentPosts]
@@ -74,6 +74,9 @@ router.get("/:id", studentPostController.getById.bind(studentPostController));
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - title
+ *               - content
  *             properties:
  *               title:
  *                 type: string
@@ -84,14 +87,16 @@ router.get("/:id", studentPostController.getById.bind(studentPostController));
  *         description: Student post created successfully
  *       400:
  *         description: Bad request
+ *       401:
+ *         description: Unauthorized
  *       500:
  *         description: Server error
  */
-router.post("/", authMiddleware, studentPostController.post.bind(studentPostController));
+router.post("/", authMiddleware, StudentPostController.createPost);
 
 /**
  * @swagger
- * /{id}:
+ * /studentpost/:
  *   put:
  *     summary: Update a student post by ID
  *     tags: [StudentPosts]
@@ -123,11 +128,11 @@ router.post("/", authMiddleware, studentPostController.post.bind(studentPostCont
  *       500:
  *         description: Server error
  */
-router.put("/:id", authMiddleware, studentPostController.putById.bind(studentPostController));
+router.put("/:id", authMiddleware, StudentPostController.putById);
 
 /**
  * @swagger
- * /{id}:
+ * /studentpost/{id}:
  *   delete:
  *     summary: Delete a student post by ID
  *     tags: [StudentPosts]
@@ -148,6 +153,6 @@ router.put("/:id", authMiddleware, studentPostController.putById.bind(studentPos
  *       500:
  *         description: Server error
  */
-router.delete("/:id", authMiddleware, studentPostController.deleteById.bind(studentPostController));
+router.delete("/:id", authMiddleware, StudentPostController.deleteById);
 
 export default router;

@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
-const student_controller_1 = __importDefault(require("../controllers/student_controller"));
+const student_controller_1 = require("../controllers/student_controller");
 const auth_middleware_1 = __importDefault(require("../common/auth_middleware"));
 /**
  * @swagger
@@ -44,7 +44,7 @@ const auth_middleware_1 = __importDefault(require("../common/auth_middleware"));
  *       500:
  *         description: Server error
  */
-router.get("/", auth_middleware_1.default, student_controller_1.default.get.bind(student_controller_1.default));
+router.get("/", auth_middleware_1.default, student_controller_1.StudentController.get);
 /**
  * @swagger
  * /students/{id}:
@@ -70,7 +70,7 @@ router.get("/", auth_middleware_1.default, student_controller_1.default.get.bind
  *       500:
  *         description: Server error
  */
-router.get("/:id", auth_middleware_1.default, student_controller_1.default.getById.bind(student_controller_1.default));
+router.get("/:id", auth_middleware_1.default, student_controller_1.StudentController.getById);
 /**
  * @swagger
  * /students:
@@ -102,10 +102,10 @@ router.get("/:id", auth_middleware_1.default, student_controller_1.default.getBy
  *       500:
  *         description: Server error
  */
-router.post("/", auth_middleware_1.default, student_controller_1.default.post.bind(student_controller_1.default));
+router.post("/", auth_middleware_1.default, student_controller_1.StudentController.createStudent);
 /**
  * @swagger
- * /students/{id}:
+ * /students:
  *   put:
  *     summary: Update a student by ID
  *     tags: [Students]
@@ -143,7 +143,7 @@ router.post("/", auth_middleware_1.default, student_controller_1.default.post.bi
  *       500:
  *         description: Server error
  */
-router.put("/:id", auth_middleware_1.default, student_controller_1.default.putById.bind(student_controller_1.default));
+router.put("/:id", auth_middleware_1.default, student_controller_1.StudentController.putById);
 /**
  * @swagger
  * /students/{id}:
@@ -169,6 +169,6 @@ router.put("/:id", auth_middleware_1.default, student_controller_1.default.putBy
  *       500:
  *         description: Server error
  */
-router.delete("/:id", auth_middleware_1.default, student_controller_1.default.deleteById.bind(student_controller_1.default));
+router.delete("/:id", auth_middleware_1.default, student_controller_1.StudentController.deleteById);
 exports.default = router;
 //# sourceMappingURL=student_route.js.map
