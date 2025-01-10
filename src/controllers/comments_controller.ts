@@ -1,5 +1,7 @@
 
+import mongoose from "mongoose";
 import Comment from "../models/post_comments";
+import { StudentPost } from "../models/student_post.model";
 
 export const CommentsController = {
   async getCommentsByPostId(req, res) {
@@ -14,26 +16,43 @@ export const CommentsController = {
 
   async createComment(req, res) {
     try {
-      const { postId } = req.params;
-      const { author, content } = req.body;
+        const { postId } = req.params;
+        const { author, content } = req.body;
 
-      if (!author || !content) {
-        return res.status(400).json({ message: "Author and content are required" });
-      }
+        // Validate input
+        if (!author || !content) {
+            return res.status(400).json({ message: "Author and content are required" });
+        }
 
-      const newComment = new Comment({
-        postId,
-        author,
-        content,
-      });
+        // Validate postId format
+        if (!mongoose.Types.ObjectId.isValid(postId)) {
+            return res.status(400).json({ message: "Invalid postId format" });
+        }
 
-      console.log (newComment)
-      const savedComment = await newComment.save();
-      res.status(201).json(savedComment);
+        // Check if the post exists
+        const post = await StudentPost.findById(postId);
+        if (!post) {
+            return res.status(404).json({ message: "Post not found" });
+        }
+
+        // Create and save the new comment
+        const newComment = new Comment({
+            postId,
+            author,
+            content,
+        });
+        const savedComment = await newComment.save();
+
+        // Update the post's comments array
+        post.comments.push(savedComment._id);
+        await post.save();
+
+        // Return the created comment
+        res.status(201).json(savedComment);
     } catch (error) {
-      res.status(500).json({ message: "Error creating comment", error });
+        res.status(500).json({ message: "Error creating comment", error });
     }
-  },
+},
 
   async deleteComment(req, res) {
     try {
