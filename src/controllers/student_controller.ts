@@ -1,9 +1,10 @@
 // Import necessary modules and dependencies
-import Student from "../models/student_model"; // Hypothetical model
+import { Student } from '../models/student.model';
 import { validationResult } from "express-validator";
+import { Request, Response } from 'express';
 
-class StudentController {
-  async get(req, res) {
+export class StudentController {
+  static async get(req: Request, res: Response) {
     try {
       const students = await Student.find(); // Fetch all students
       res.status(200).json(students);
@@ -13,7 +14,7 @@ class StudentController {
     }
   }
 
-  async getById(req, res) {
+  static async getById(req: Request, res: Response) {
     try {
       const { id } = req.params;
       const student = await Student.findById(id); // Fetch student by ID
@@ -27,24 +28,35 @@ class StudentController {
     }
   }
 
-  async post(req, res) {
-    console.log('here')
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
+  static async createStudent(req: Request, res: Response) {
     try {
-      const { name, age, email } = req.body;
-      const newStudent = new Student({ name, age, email }); // Create new student
-      await newStudent.save(); // Save to database
-      res.status(201).json(newStudent);
+      const studentData = req.body;
+      
+      // Create a new Student instance using the mongoose model
+      const student = new Student({
+        ...studentData,
+        // Make sure all required fields are included
+        // Add any default values if needed
+      });
+
+      // Save the student to the database
+      const savedStudent = await student.save();
+
+      res.status(201).json({
+        status: 'success',
+        data: savedStudent
+      });
     } catch (error) {
-      console.error("Error creating student:", error);
-      res.status(500).json({ message: "Server error" });
+      console.error('Error creating student:', error);
+      res.status(500).json({
+        status: 'error',
+        message: 'Failed to create student',
+        error: error.message
+      });
     }
   }
 
-  async putById(req, res) {
+  static async putById(req: Request, res: Response) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -65,7 +77,7 @@ class StudentController {
     }
   }
 
-  async deleteById(req, res) {
+  static async deleteById(req: Request, res: Response) {
     try {
       const { id } = req.params;
       const student = await Student.findByIdAndDelete(id); // Delete by ID
@@ -79,5 +91,3 @@ class StudentController {
     }
   }
 }
-
-export default new StudentController();
