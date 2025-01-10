@@ -29,18 +29,24 @@ const studentPostSchema = new mongoose_1.Schema({
     student: {
         type: mongoose_1.default.Schema.Types.ObjectId,
         ref: 'Student',
-        required: true
+        required: true,
     },
     title: {
         type: String,
-        required: true
+        required: true,
     },
     content: {
         type: String,
-        required: true
-    }
+        required: true,
+    },
+    comments: [
+        {
+            type: mongoose_1.default.Schema.Types.ObjectId,
+            ref: 'Comment', // Reference to the Comment model
+        },
+    ],
 }, {
-    timestamps: true
+    timestamps: true, // Automatically adds createdAt and updatedAt fields
 });
 exports.StudentPost = mongoose_1.default.model('StudentPost', studentPostSchema);
 //# sourceMappingURL=student_post.model.js.map

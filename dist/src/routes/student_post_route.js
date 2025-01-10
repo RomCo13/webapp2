@@ -15,7 +15,7 @@ const auth_middleware_1 = __importDefault(require("../common/auth_middleware"));
  */
 /**
  * @swagger
- * /studentposts:
+ * /studentpost:
  *   get:
  *     summary: Get all student posts
  *     tags: [StudentPosts]
@@ -41,7 +41,7 @@ const auth_middleware_1 = __importDefault(require("../common/auth_middleware"));
 router.get("/", student_post_controller_1.StudentPostController.getPosts);
 /**
  * @swagger
- * /studentposts/{id}:
+ * /studentpost/{id}:
  *   get:
  *     summary: Get a student post by ID
  *     tags: [StudentPosts]
@@ -63,7 +63,7 @@ router.get("/", student_post_controller_1.StudentPostController.getPosts);
 router.get("/:id", student_post_controller_1.StudentPostController.getPostById);
 /**
  * @swagger
- * /studentposts:
+ * /studentpost:
  *   post:
  *     summary: Create a new student post
  *     tags: [StudentPosts]
@@ -96,7 +96,7 @@ router.get("/:id", student_post_controller_1.StudentPostController.getPostById);
 router.post("/", auth_middleware_1.default, student_post_controller_1.StudentPostController.createPost);
 /**
  * @swagger
- * /studentposts/{id}:
+ * /studentpost/{id}:
  *   put:
  *     summary: Update a student post by ID
  *     tags: [StudentPosts]
@@ -131,7 +131,7 @@ router.post("/", auth_middleware_1.default, student_post_controller_1.StudentPos
 router.put("/:id", auth_middleware_1.default, student_post_controller_1.StudentPostController.putById);
 /**
  * @swagger
- * /studentposts/{id}:
+ * /studentpost/{id}:
  *   delete:
  *     summary: Delete a student post by ID
  *     tags: [StudentPosts]

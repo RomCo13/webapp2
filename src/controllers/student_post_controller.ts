@@ -6,6 +6,7 @@ export class StudentPostController {
     static async createPost(req: AuthRequest, res: Response) {
         try {
             const studentId = req.user?._id;
+            console.log(studentId)
 
             if (!studentId) {
                 return res.status(401).json({

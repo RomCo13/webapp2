@@ -32,6 +32,7 @@ const initApp = () => {
             app.use("/students", student_route_1.default);
             app.use("/studentpost", student_post_route_1.default);
             app.use("/auth", auth_route_1.default);
+            app.use("/comments", student_post_route_1.default);
             app.use("/file", file_route_1.default);
             app.use("/public", express_1.default.static("public"));
             resolve(app);

@@ -17,6 +17,7 @@ class StudentPostController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const studentId = (_a = req.user) === null || _a === void 0 ? void 0 : _a._id;
+                console.log(studentId);
                 if (!studentId) {
                     return res.status(401).json({
                         status: 'error',
