@@ -35,7 +35,6 @@ const studentSchema = new mongoose_1.Schema({
         required: true,
         unique: true
     },
-    // ... other fields
 }, {
     timestamps: true
 });

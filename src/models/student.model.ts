@@ -4,7 +4,6 @@ export interface IStudent extends Document {
     // Add your student properties here
     name: string;
     email: string;
-    // ... other properties
 }
 
 const studentSchema = new Schema({
@@ -17,7 +16,6 @@ const studentSchema = new Schema({
         required: true,
         unique: true
     },
-    // ... other fields
 }, {
     timestamps: true
 });

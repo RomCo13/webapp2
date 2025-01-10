@@ -27,6 +27,7 @@ export const CommentsController = {
         content,
       });
 
+      console.log (newComment)
       const savedComment = await newComment.save();
       res.status(201).json(savedComment);
     } catch (error) {
