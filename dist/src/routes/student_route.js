@@ -105,7 +105,7 @@ router.get("/:id", auth_middleware_1.default, student_controller_1.StudentContro
 router.post("/", auth_middleware_1.default, student_controller_1.StudentController.createStudent);
 /**
  * @swagger
- * /students/{id}:
+ * /students:
  *   put:
  *     summary: Update a student by ID
  *     tags: [Students]

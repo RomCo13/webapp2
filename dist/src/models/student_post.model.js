@@ -43,6 +43,7 @@ const studentPostSchema = new mongoose_1.Schema({
         {
             type: mongoose_1.default.Schema.Types.ObjectId,
             ref: 'Comment', // Reference to the Comment model
+            required: false,
         },
     ],
 }, {

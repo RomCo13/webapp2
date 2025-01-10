@@ -92,11 +92,11 @@ router.get("/:id", StudentPostController.getPostById);
  *       500:
  *         description: Server error
  */
-router.post("/:id", authMiddleware, StudentPostController.createPost);
+router.post("/", authMiddleware, StudentPostController.createPost);
 
 /**
  * @swagger
- * /studentpost/{id}:
+ * /studentpost/:
  *   put:
  *     summary: Update a student post by ID
  *     tags: [StudentPosts]

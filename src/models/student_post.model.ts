@@ -28,6 +28,7 @@ const studentPostSchema = new Schema(
             {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'Comment', // Reference to the Comment model
+                required: false,
             },
         ],
     },
