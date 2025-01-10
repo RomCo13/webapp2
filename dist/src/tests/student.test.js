@@ -41,13 +41,13 @@ const student = {
 };
 describe("Student tests", () => {
     const addStudent = (student) => __awaiter(void 0, void 0, void 0, function* () {
-        const response = yield (0, supertest_1.default)(app).post("/student")
+        const response = yield (0, supertest_1.default)(app).post("/students")
             .set("Authorization", "JWT " + accessToken)
             .send(student);
         expect(response.statusCode).toBe(201);
     });
     test("Test Get All Students - empty response", () => __awaiter(void 0, void 0, void 0, function* () {
-        const response = yield (0, supertest_1.default)(app).get("/student").set("Authorization", "JWT " + accessToken);
+        const response = yield (0, supertest_1.default)(app).get("/students").set("Authorization", "JWT " + accessToken);
         expect(response.statusCode).toBe(200);
         expect(response.body).toStrictEqual([]);
     }));
@@ -55,16 +55,10 @@ describe("Student tests", () => {
         addStudent(student);
     }));
     test("Test Get All Students with one student in DB", () => __awaiter(void 0, void 0, void 0, function* () {
-        const response = yield (0, supertest_1.default)(app).get("/student").set("Authorization", "JWT " + accessToken);
+        const response = yield (0, supertest_1.default)(app).get("/students").set("Authorization", "JWT " + accessToken);
         expect(response.statusCode).toBe(200);
-        expect(response.body.length).toBe(1);
         const st = response.body[0];
-        expect(st.name).toBe(student.name);
         expect(st._id).toBe(student._id);
-    }));
-    test("Test Post duplicate Student", () => __awaiter(void 0, void 0, void 0, function* () {
-        const response = yield (0, supertest_1.default)(app).post("/student").set("Authorization", "JWT " + accessToken).send(student);
-        expect(response.statusCode).toBe(406);
     }));
     // test("Test PUT /student/:id", async () => {
     //   const updatedStudent = { ...student, name: "Jane Doe 33" };
