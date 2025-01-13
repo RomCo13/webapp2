@@ -254,11 +254,9 @@ describe('Comments Controller', () => {
                 commentId: 'valid-id' 
             };
 
-            // Mock mongoose.Types.ObjectId.isValid
             jest.spyOn(mongoose.Types.ObjectId, 'isValid')
                 .mockReturnValue(true);
 
-            // Mock findById to return null
             (StudentPost.findById as jest.Mock).mockResolvedValueOnce(null);
 
             await CommentsController.deleteComment(

@@ -12,7 +12,11 @@ jest.mock('express-validator', () => ({
 // Add proper mock for Student model at the top of the file
 jest.mock('../../models/student.model', () => ({
     Student: {
-        create: jest.fn(),
+        create: jest.fn().mockImplementation((data) => Promise.resolve({
+            ...data,
+            _id: 'test-id',
+            save: jest.fn().mockResolvedValue(true)
+        })),
         find: jest.fn(),
         findById: jest.fn(),
         findByIdAndUpdate: jest.fn(),
@@ -62,8 +66,10 @@ describe('Student Controller', () => {
             );
 
             expect(mockStatus).toHaveBeenCalledWith(500);
-            expect(mockJson).toHaveBeenCalledWith({ 
-                message: "Server error" 
+            expect(mockJson).toHaveBeenCalledWith({
+                status: 'error',
+                message: 'Failed to create student',
+                error: error.message
             });
         });
 
@@ -80,8 +86,34 @@ describe('Student Controller', () => {
             );
 
             expect(mockStatus).toHaveBeenCalledWith(400);
-            expect(mockJson).toHaveBeenCalledWith({ 
-                errors: [{ msg: 'Invalid input' }] 
+            expect(mockJson).toHaveBeenCalledWith({
+                errors: [{ msg: 'Invalid input' }]
+            });
+        });
+
+        it('should create student successfully', async () => {
+            mockRequest.body = {
+                name: 'Test Student',
+                email: 'test@test.com'
+            };
+
+            const mockStudent = {
+                ...mockRequest.body,
+                _id: 'test-id',
+                save: jest.fn().mockResolvedValue(true)
+            };
+
+            (Student.create as jest.Mock).mockResolvedValueOnce(mockStudent);
+
+            await StudentController.createStudent(
+                mockRequest as Request,
+                mockResponse as Response
+            );
+
+            expect(mockStatus).toHaveBeenCalledWith(201);
+            expect(mockJson).toHaveBeenCalledWith({
+                status: 'success',
+                data: mockStudent
             });
         });
     });
