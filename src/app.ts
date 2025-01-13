@@ -6,7 +6,6 @@ import bodyParser from "body-parser";
 import studentRoute from "./routes/student_route";
 import studentPostRoute from "./routes/student_post_route";
 import authRoute from "./routes/auth_route";
-import fileRoute from "./routes/file_route";
 import commentsRoute from "./routes/comments_route";
 
 const initApp = (): Promise<Express> => {
@@ -30,7 +29,6 @@ const initApp = (): Promise<Express> => {
       app.use("/studentpost", studentPostRoute);
       app.use("/auth", authRoute);
       app.use("/comments", commentsRoute);
-      app.use("/file", fileRoute);
       app.use("/public", express.static("public"));
       resolve(app);
     });

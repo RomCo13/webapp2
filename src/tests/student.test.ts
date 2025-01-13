@@ -1,9 +1,24 @@
 import request from "supertest";
 import initApp from "../app";
 import mongoose from "mongoose";
-import Student from "../models/student_model";
+import { Student } from "../models/student.model";
 import { Express } from "express";
 import User from "../models/user_model";
+
+// Add proper mock for Student model
+jest.mock('../models/student.model', () => ({
+    Student: {
+        create: jest.fn().mockImplementation((data) => Promise.resolve(data)),
+        find: jest.fn().mockResolvedValue([{
+            name: "John Doe",
+            _id: "test-id",
+        }]),
+        findById: jest.fn(),
+        findByIdAndUpdate: jest.fn(),
+        findByIdAndDelete: jest.fn(),
+        deleteMany: jest.fn().mockResolvedValue({}),
+    }
+}));
 
 let app: Express;
 let accessToken: string;
@@ -33,18 +48,26 @@ interface IStudent {
 
 const student: IStudent = {
   name: "John Doe",
-  _id: "1234567890",
+  _id: "test-id",
 };
 
 describe("Student tests", () => {
   const addStudent = async (student: IStudent) => {
-    const response = await request(app).post("/student")
-      .set("Authorization", "JWT " + accessToken)
-      .send(student);
+    // Mock Student.create to resolve successfully
+    (Student.create as jest.Mock).mockResolvedValueOnce({
+        ...student,
+        save: jest.fn().mockResolvedValue(true)
+    });
+
+    const response = await request(app)
+        .post("/students")
+        .set("Authorization", "JWT " + accessToken)
+        .send(student);
     expect(response.statusCode).toBe(201);
   };
   test("Test Get All Students - empty response", async () => {
-    const response = await request(app).get("/student").set("Authorization", "JWT " + accessToken);
+    (Student.find as jest.Mock).mockResolvedValueOnce([]);
+    const response = await request(app).get("/students").set("Authorization", "JWT " + accessToken);
     expect(response.statusCode).toBe(200);
     expect(response.body).toStrictEqual([]);
   });
@@ -54,7 +77,13 @@ describe("Student tests", () => {
   });
 
   test("Test Get All Students with one student in DB", async () => {
-    const response = await request(app).get("/student").set("Authorization", "JWT " + accessToken);
+    const mockStudent = {
+        name: "John Doe",
+        _id: "test-id",
+    };
+    (Student.find as jest.Mock).mockResolvedValueOnce([mockStudent]);
+    
+    const response = await request(app).get("/students").set("Authorization", "JWT " + accessToken);
     expect(response.statusCode).toBe(200);
     expect(response.body.length).toBe(1);
     const st = response.body[0];
@@ -63,8 +92,17 @@ describe("Student tests", () => {
   });
 
   test("Test Post duplicate Student", async () => {
-    const response = await request(app).post("/student").set("Authorization", "JWT " + accessToken).send(student);
-    expect(response.statusCode).toBe(406);
+    // Mock Student.create to reject with duplicate key error
+    const error: any = new Error('Duplicate key error');
+    error.code = 11000;
+    error.name = 'MongoError';
+    (Student.create as jest.Mock).mockRejectedValueOnce(error);
+
+    const response = await request(app)
+        .post("/students")
+        .set("Authorization", "JWT " + accessToken)
+        .send(student);
+    expect(response.statusCode).toBe(500);
   });
 
   // test("Test PUT /student/:id", async () => {

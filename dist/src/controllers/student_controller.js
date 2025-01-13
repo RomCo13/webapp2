@@ -45,14 +45,14 @@ class StudentController {
     static createStudent(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const studentData = req.body;
-                // Create a new Student instance using the mongoose model
-                const student = new student_model_1.Student(Object.assign({}, studentData));
-                // Save the student to the database
-                const savedStudent = yield student.save();
+                const errors = (0, express_validator_1.validationResult)(req);
+                if (!errors.isEmpty()) {
+                    return res.status(400).json({ errors: errors.array() });
+                }
+                const student = yield student_model_1.Student.create(req.body);
                 res.status(201).json({
                     status: 'success',
-                    data: savedStudent
+                    data: student
                 });
             }
             catch (error) {

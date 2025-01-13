@@ -30,21 +30,15 @@ export class StudentController {
 
   static async createStudent(req: Request, res: Response) {
     try {
-      const studentData = req.body;
-      
-      // Create a new Student instance using the mongoose model
-      const student = new Student({
-        ...studentData,
-        // Make sure all required fields are included
-        // Add any default values if needed
-      });
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
 
-      // Save the student to the database
-      const savedStudent = await student.save();
-
+      const student = await Student.create(req.body);
       res.status(201).json({
         status: 'success',
-        data: savedStudent
+        data: student
       });
     } catch (error) {
       console.error('Error creating student:', error);

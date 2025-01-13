@@ -61,28 +61,39 @@ describe("Auth tests", () => {
         expect(accessToken).toBeDefined();
     }));
     test("Test forbidden access without token", () => __awaiter(void 0, void 0, void 0, function* () {
-        const response = yield (0, supertest_1.default)(app).get("/student");
+        const response = yield (0, supertest_1.default)(app).get("/students");
         expect(response.statusCode).toBe(401);
     }));
     test("Test access with valid token", () => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield (0, supertest_1.default)(app)
-            .get("/student")
+            .get("/students")
             .set("Authorization", "JWT " + accessToken);
         expect(response.statusCode).toBe(200);
     }));
     test("Test access with invalid token", () => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield (0, supertest_1.default)(app)
-            .get("/student")
+            .get("/students")
             .set("Authorization", "JWT 1" + accessToken);
         expect(response.statusCode).toBe(401);
     }));
     jest.setTimeout(10000);
     test("Test access after timeout of token", () => __awaiter(void 0, void 0, void 0, function* () {
-        yield new Promise(resolve => setTimeout(() => resolve("done"), 5000));
+        // Set JWT_EXPIRATION to a very short time for this test
+        const originalExpiration = process.env.JWT_EXPIRATION;
+        process.env.JWT_EXPIRATION = '1s';
+        // Get a new token with the short expiration
+        const loginResponse = yield (0, supertest_1.default)(app)
+            .post("/auth/login")
+            .send(user);
+        const shortLivedToken = loginResponse.body.accessToken;
+        // Wait for token to expire
+        yield new Promise(resolve => setTimeout(resolve, 1500));
         const response = yield (0, supertest_1.default)(app)
-            .get("/student")
-            .set("Authorization", "JWT " + accessToken);
-        expect(response.statusCode).not.toBe(200);
+            .get("/students")
+            .set("Authorization", "JWT " + shortLivedToken);
+        // Restore original expiration
+        process.env.JWT_EXPIRATION = originalExpiration;
+        expect(response.statusCode).toBe(401);
     }));
     test("Test refresh token", () => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield (0, supertest_1.default)(app)
@@ -95,7 +106,7 @@ describe("Auth tests", () => {
         const newAccessToken = response.body.accessToken;
         newRefreshToken = response.body.refreshToken;
         const response2 = yield (0, supertest_1.default)(app)
-            .get("/student")
+            .get("/students")
             .set("Authorization", "JWT " + newAccessToken);
         expect(response2.statusCode).toBe(200);
     }));
