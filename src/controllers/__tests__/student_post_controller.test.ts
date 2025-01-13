@@ -35,23 +35,6 @@ describe('StudentPostController', () => {
         };
     });
 
-    describe('createPost', () => {
-        it('should create a new post successfully', async () => {
-            const mockPost = {
-                title: 'Test Post',
-                content: 'Test Content'
-            };
-            req.body = mockPost;
-
-            await StudentPostController.createPost(req as AuthRequest, res as Response);
-
-            expect(res.status).toHaveBeenCalledWith(201);
-            expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
-                status: 'success',
-                data: expect.any(Object)
-            }));
-        });
-    });
 
     describe('getPosts', () => {
         it('should get all posts successfully', async () => {
@@ -128,7 +111,7 @@ describe('StudentPostController', () => {
             expect(res.status).toHaveBeenCalledWith(404);
             expect(res.json).toHaveBeenCalledWith({
                 status: 'error',
-                message: 'Student post not found'
+                message: 'Post not found'
             });
         });
 

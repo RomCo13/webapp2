@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">90.69% </span>
+                <span class="strong">92.85% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>39/43</span>
+                <span class='fraction'>39/42</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">90.69% </span>
+                <span class="strong">92.85% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>39/43</span>
+                <span class='fraction'>39/42</span>
             </div>
         
             
@@ -211,8 +211,7 @@
 <a name='L146'></a><a href='#L146'>146</a>
 <a name='L147'></a><a href='#L147'>147</a>
 <a name='L148'></a><a href='#L148'>148</a>
-<a name='L149'></a><a href='#L149'>149</a>
-<a name='L150'></a><a href='#L150'>150</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L149'></a><a href='#L149'>149</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -220,7 +219,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -236,17 +234,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -369,7 +367,6 @@ export class StudentPostController {
     static async createPost(req: AuthRequest, res: Response) {
         try {
             const studentId = req.user<span class="branch-0 cbranch-no" title="branch not covered" >?._</span>id;
-            console.log(studentId)
 &nbsp;
             <span class="missing-if-branch" title="if path not taken" >I</span>if (!studentId) {
 <span class="cstat-no" title="statement not covered" >                return res.status(401).json({</span>
@@ -385,17 +382,17 @@ export class StudentPostController {
             };
 &nbsp;
             const post = new StudentPost(postData);
-            const savedPost = <span class="cstat-no" title="statement not covered" >await post.save();</span>
+            const savedPost = await post.save();
 &nbsp;
-            const populatedPost = <span class="cstat-no" title="statement not covered" >await savedPost.populate('student', 'name email');</span>
+            const populatedPost = await savedPost.populate('student', 'name email');
 &nbsp;
-<span class="cstat-no" title="statement not covered" >            res.status(201).json({</span>
+            res.status(201).json({
                 status: 'success',
                 data: populatedPost
             });
         } catch (error) {
-            console.error('Error creating student post:', error);
-            res.status(500).json({
+<span class="cstat-no" title="statement not covered" >            console.error('Error creating student post:', error);</span>
+<span class="cstat-no" title="statement not covered" >            res.status(500).json({</span>
                 status: 'error',
                 message: 'Failed to create student post',
                 error: error.message
@@ -517,7 +514,7 @@ export class StudentPostController {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-01-13T18:25:45.418Z
+                at 2025-01-13T19:08:48.694Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

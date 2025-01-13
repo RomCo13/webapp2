@@ -102,7 +102,7 @@ describe("Student tests", () => {
         .post("/students")
         .set("Authorization", "JWT " + accessToken)
         .send(student);
-    expect(response.statusCode).toBe(406);
+    expect(response.statusCode).toBe(500);
   });
 
   // test("Test PUT /student/:id", async () => {

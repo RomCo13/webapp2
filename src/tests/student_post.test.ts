@@ -44,7 +44,6 @@ describe("Student Post tests", () => {
             _id: new mongoose.Types.ObjectId(),
             save: jest.fn().mockResolvedValue(true)
         };
-        (StudentPost.create as jest.Mock).mockResolvedValueOnce(mockPost);
 
         const response = await request(app)
             .post("/studentpost")

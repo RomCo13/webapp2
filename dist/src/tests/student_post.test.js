@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
 const app_1 = __importDefault(require("../app"));
 const mongoose_1 = __importDefault(require("mongoose"));
-const student_post_model_1 = require("../models/student_post.model");
 let app;
 let accessToken;
 beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
@@ -50,7 +49,6 @@ describe("Student Post tests", () => {
             _id: new mongoose_1.default.Types.ObjectId(),
             save: jest.fn().mockResolvedValue(true)
         };
-        student_post_model_1.StudentPost.create.mockResolvedValueOnce(mockPost);
         const response = yield (0, supertest_1.default)(app)
             .post("/studentpost")
             .set("Authorization", "JWT " + accessToken)
