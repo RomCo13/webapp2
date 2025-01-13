@@ -1,66 +1,61 @@
-// import { Express } from "express";
-// import request from "supertest";
-// import initApp from "../app";
-// import mongoose from "mongoose";
-// import User, { IUser } from "../models/user_model";
-// import { IStudentPost, StudentPost } from "../models/student_post.model";
-// let app: Express;
-// const user: IUser = {
-//   email: "test@student.post.test",
-//   password: "1234567890",
-// }
-// let accessToken = "";
-// beforeAll(async () => {
-//   app = await initApp();
-//   console.log("beforeAll");
-//   await StudentPost.deleteMany();
-//   await User.deleteMany({ 'email': user.email });
-//   const response = await request(app).post("/auth/register").send(user);
-//   user._id = response.body._id;
-//   const response2 = await request(app).post("/auth/login").send(user);
-//   accessToken = response2.body.accessToken;
-// });
-// afterAll(async () => {
-//   await mongoose.connection.close();
-// });
-// const post1: IStudentPost = {
-//   _id: new mongoose.Types.ObjectId(), // Unique identifier for the post
-//   student: new mongoose.Types.ObjectId(), // Reference to a student
-//   title: "Understanding Mongoose Relationships",
-//   content: "This post explains how to use Mongoose to create relationships between documents.",
-//   comments: [
-//       new mongoose.Types.ObjectId(), // Reference to comment 1
-//       new mongoose.Types.ObjectId(), // Reference to comment 2
-//   ],
-//   createdAt: new Date("2025-01-01T12:00:00Z"), // Example creation date
-//   updatedAt: new Date("2025-01-05T15:30:00Z"), // Example last updated date
-// };
-// describe("Student post tests", () => {
-//   const addStudentPost = async (post: IStudentPost) => {
-//     const response = await request(app)
-//       .post("/studentpost")
-//       .set("Authorization", "JWT " + accessToken)
-//       .send(post);
-//     expect(response.statusCode).toBe(201);
-//     expect(response.body.owner).toBe(user._id);
-//     expect(response.body.title).toBe(post.title);
-//     expect(response.body.message).toBe(post.message);
-//   };
-//   test("Test Get All Student posts - empty response", async () => {
-//     const response = await request(app).get("/studentpost");
-//     expect(response.statusCode).toBe(200);
-//     expect(response.body).toStrictEqual([]);
-//   });
-//   test("Test Post Student post", async () => {
-//     addStudentPost(post1);
-//   });
-//   test("Test Get All Students posts with one post in DB", async () => {
-//     const response = await request(app).get("/studentpost");
-//     expect(response.statusCode).toBe(200);
-//     const rc = response.body[0];
-//     expect(rc.title).toBe(post1.title);
-//     expect(rc.message).toBe(post1.message);
-//     expect(rc.owner).toBe(user._id);
-//   });
-// });
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const supertest_1 = __importDefault(require("supertest"));
+const app_1 = __importDefault(require("../app"));
+const mongoose_1 = __importDefault(require("mongoose"));
+const student_post_model_1 = require("../models/student_post.model");
+let app;
+let accessToken;
+beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
+    app = yield (0, app_1.default)();
+    const user = {
+        email: "test@test.com",
+        password: "12345678"
+    };
+    yield (0, supertest_1.default)(app).post("/auth/register").send(user);
+    const response = yield (0, supertest_1.default)(app).post("/auth/login").send(user);
+    accessToken = response.body.accessToken;
+}));
+afterAll(() => __awaiter(void 0, void 0, void 0, function* () {
+    yield mongoose_1.default.connection.close();
+}));
+describe("Student Post tests", () => {
+    beforeEach(() => {
+        // Reset mocks before each test
+        jest.clearAllMocks();
+    });
+    test("Create post without auth should fail", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(app)
+            .post("/studentpost")
+            .send({ title: "Test Post", content: "Test Content" });
+        expect(response.statusCode).toBe(401);
+    }));
+    test("Create post with auth should succeed", () => __awaiter(void 0, void 0, void 0, function* () {
+        // Mock StudentPost.create
+        const mockPost = {
+            title: "Test Post",
+            content: "Test Content",
+            _id: new mongoose_1.default.Types.ObjectId(),
+            save: jest.fn().mockResolvedValue(true)
+        };
+        student_post_model_1.StudentPost.create.mockResolvedValueOnce(mockPost);
+        const response = yield (0, supertest_1.default)(app)
+            .post("/studentpost")
+            .set("Authorization", "JWT " + accessToken)
+            .send({ title: "Test Post", content: "Test Content" });
+        expect(response.statusCode).toBe(201);
+    }));
+});
 //# sourceMappingURL=student_post.test.js.map
